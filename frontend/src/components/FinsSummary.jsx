@@ -3,9 +3,8 @@ function extractLatest(finsData) {
   // J-Quants v2 は { data: [...] } 形式。後方互換として旧キーもフォールバック。
   const rows = finsData.data || finsData.statements || finsData.fins || []
   if (rows.length === 0) return null
-  const sorted = [...rows].sort((a, b) =>
-    (a.DisclosedDate || '') < (b.DisclosedDate || '') ? 1 : -1,
-  )
+  const dateOf = (r) => r.DiscDate || r.DisclosedDate || ''
+  const sorted = [...rows].sort((a, b) => (dateOf(a) < dateOf(b) ? 1 : -1))
   return sorted[0]
 }
 
@@ -27,17 +26,18 @@ export default function FinsSummary({ finsData }) {
     )
   }
 
+  // v2 短縮列名 (Sales/OP/NP/TA) を優先。後方互換として v1 名もフォールバック。
   const cards = [
-    { label: '売上高', value: latest.NetSales },
-    { label: '営業利益', value: latest.OperatingProfit },
-    { label: '純利益', value: latest.Profit },
-    { label: '総資産', value: latest.TotalAssets },
+    { label: '売上高', value: latest.Sales ?? latest.NetSales },
+    { label: '営業利益', value: latest.OP ?? latest.OperatingProfit },
+    { label: '純利益', value: latest.NP ?? latest.Profit },
+    { label: '総資産', value: latest.TA ?? latest.TotalAssets },
   ]
 
   return (
     <div>
       <div className="text-xs text-slate-500 mb-2">
-        開示日: {latest.DisclosedDate || '—'} / 期: {latest.TypeOfCurrentPeriod || '—'}
+        開示日: {latest.DiscDate || latest.DisclosedDate || '—'} / 期: {latest.CurPerType || latest.TypeOfCurrentPeriod || '—'}
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {cards.map((c) => (
