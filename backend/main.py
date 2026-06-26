@@ -3,8 +3,8 @@ J-Quants ダッシュボード バックエンド (FastAPI)
 
 エンドポイント:
   GET  /health           死活監視
-  GET  /api/stock        株価日足データ (J-Quants /v1/prices/daily_quotes)
-  GET  /api/fins         財務サマリー (J-Quants /v1/fins/statements)
+  GET  /api/stock        株価日足データ (J-Quants /v1/equities/bars/daily)
+  GET  /api/fins         財務サマリー (J-Quants /v1/fins/summary)
   POST /api/ai-comment   Claude AI コメント生成 (claude-sonnet-4-6)
 """
 
@@ -74,7 +74,7 @@ async def jquants_get(path: str, params: Dict[str, str]) -> Dict[str, Any]:
         raise HTTPException(status_code=500, detail="JQUANTS_API_KEY が未設定です")
 
     url = f"{JQUANTS_BASE}{path}"
-    headers = {"Authorization": f"Bearer {JQUANTS_API_KEY}"}
+    headers = {"x-api-key": JQUANTS_API_KEY}
 
     async with httpx.AsyncClient(timeout=30.0) as client:
         for attempt in range(1, RETRY_MAX + 1):
@@ -117,7 +117,7 @@ async def get_stock(
     if date:
         params["date"] = date
 
-    data = await jquants_get("/prices/daily_quotes", params)
+    data = await jquants_get("/equities/bars/daily", params)
     cache_set(cache_key, data)
     return data
 
@@ -133,7 +133,7 @@ async def get_fins(
     if cached is not None:
         return cached
 
-    data = await jquants_get("/fins/statements", {"code": code})
+    data = await jquants_get("/fins/summary", {"code": code})
     cache_set(cache_key, data)
     return data
 
