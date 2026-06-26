@@ -25,7 +25,7 @@ load_dotenv()
 JQUANTS_API_KEY = os.getenv("JQUANTS_API_KEY", "")
 CLAUDE_API_KEY = os.getenv("CLAUDE_API_KEY", "")
 
-JQUANTS_BASE = "https://api.jquants.com/v1"
+JQUANTS_BASE = "https://api.jquants.com/v2"
 CACHE_TTL_SECONDS = 60 * 60  # 1時間
 RETRY_MAX = 3
 RETRY_WAIT_SECONDS = 30
