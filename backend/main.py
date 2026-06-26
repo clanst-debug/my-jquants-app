@@ -3,8 +3,8 @@ J-Quants ダッシュボード バックエンド (FastAPI)
 
 エンドポイント:
   GET  /health           死活監視
-  GET  /api/stock        株価日足データ (J-Quants /v1/equities/bars/daily)
-  GET  /api/fins         財務サマリー (J-Quants /v1/fins/summary)
+  GET  /api/stock        株価日足データ (J-Quants v2 /v2/equities/bars/daily)
+  GET  /api/fins         財務サマリー (J-Quants v2 /v2/fins/summary)
   POST /api/ai-comment   Claude AI コメント生成 (claude-sonnet-4-6)
 """
 

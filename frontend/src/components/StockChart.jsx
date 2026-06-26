@@ -10,11 +10,13 @@ import {
 
 function extractRows(stockData) {
   if (!stockData) return []
-  const rows = stockData.daily_quotes || stockData.prices || []
+  // J-Quants v2 は { data: [...] } 形式。後方互換として旧キーもフォールバック。
+  const rows = stockData.data || stockData.daily_quotes || stockData.prices || []
   return rows
     .map((r) => ({
+      // v2: AdjC (調整後終値) / C (終値) を優先。v1 旧キーもフォールバック。
       date: r.Date,
-      close: r.AdjustmentClose ?? r.Close ?? r.AdjClose ?? null,
+      close: r.AdjC ?? r.C ?? r.AdjustmentClose ?? r.Close ?? r.AdjClose ?? null,
     }))
     .filter((r) => r.date && r.close != null)
     .sort((a, b) => (a.date < b.date ? -1 : 1))

@@ -1,6 +1,7 @@
 function extractLatest(finsData) {
   if (!finsData) return null
-  const rows = finsData.statements || finsData.fins || []
+  // J-Quants v2 は { data: [...] } 形式。後方互換として旧キーもフォールバック。
+  const rows = finsData.data || finsData.statements || finsData.fins || []
   if (rows.length === 0) return null
   const sorted = [...rows].sort((a, b) =>
     (a.DisclosedDate || '') < (b.DisclosedDate || '') ? 1 : -1,
