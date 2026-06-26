@@ -95,7 +95,7 @@
 
 ## フェーズ3：デプロイ
 
-- [ ] 3-1. `.gitignore` を作成する
+- [x] 3-1. `.gitignore` を作成する
   - `backend/.env` を必ず含める
   - `node_modules/` `__pycache__/` `.DS_Store` なども追加
 
@@ -120,7 +120,7 @@
   - 環境変数 `VITE_API_BASE_URL` にRailwayのURLを設定
   - デプロイ完了後、動作確認
 
-- [ ] 3-5. 本番CORS設定を更新する
+- [x] 3-5. 本番CORS設定を更新する
   - `main.py` の `allow_origins` をVercelのURLに変更
   - GitHubにpushしてRailwayが自動再デプロイするのを確認
 
